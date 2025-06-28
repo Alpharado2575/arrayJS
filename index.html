@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Shopping List</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+  body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #00bcd4;
+  }
+
+  .filter-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  #filter {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    margin: auto;
+    max-width: 1000px;
+    border-radius: 8px;
+    background-color: #1e1e1e;
+    padding: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    color: #e0e0e0;
+  }
+
+  th {
+    background-color: #333;
+    color: #00bcd4;
+    padding: 12px;
+    text-align: left;
+  }
+
+  td {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+  }
+
+  tr:hover {
+    background-color: #2a2a2a;
+  }
+
+  .discount {
+    color: #4caf50;
+    font-weight: bold;
+  }
+
+  .code-section {
+    background-color: #1e1e1e;
+    color: #f8f8f2;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 40px;
+    font-size: 0.95rem;
+  }
+
+  .code-container {
+    position: relative;
+  }
+
+  .copy-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #00bcd4;
+    color: black;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .copy-button.copied {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+  }
+</style>
+
+</head>
+
+<body>
+    <h1>Array Shopping List</h1>
+    <div class="filter-container">
+        <select id="filter">
+            <option value="all">Seluruh Daftar Belanja</option>
+            <option value="discount">Barang Diskon</option>
+            <option value="expensive">Barang Mahal (> Rp100,000)</option>
+            <option value="final">Daftar Belanja Setelah Pengurangan</option>
+        </select>
+    </div>
+    <div class="table-container">
+        <table id="shoppingTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>Harga</th>
+                    <th>Diskon</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    <div class="code-section">
+        <h2>Submission Code (output, bisa dilihat di console)</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode()">
+                <i class="fa fa-copy"></i>
+                <i class="fa fa-check"></i>
+                <span>Copy Code</span>
+            </button>
+            <pre><code class="language-javascript">
+// case array 
+// kamu memiliki daftar belanja kebutuhan sehari-hari dan ingin mengelola datanya:
+// 1. tampilkan seluruh data barang
+// 2. tampilkan beberapa barang yang sedang diskon
+// 3. tampilkan barang yang harganya di atas Rp100.000
+// 4. tampilkan data akhir belanjaan
+
+
+let daftarBelanja = [
+  { id: 1, nama: "Beras 5kg", harga: 68000, diskon: true },
+  { id: 2, nama: "Minyak Goreng 2L", harga: 32000, diskon: false },
+  { id: 3, nama: "Gula Pasir 1kg", harga: 15000, diskon: true },
+  { id: 4, nama: "Sabun Mandi", harga: 7000, diskon: false },
+  { id: 5, nama: "Sikat Gigi", harga: 12000, diskon: true },
+  { id: 6, nama: "Pasta Gigi", harga: 13000, diskon: false },
+  { id: 7, nama: "Detergen Bubuk", harga: 28000, diskon: true },
+  { id: 8, nama: "Shampoo", harga: 23000, diskon: false },
+  { id: 9, nama: "Susu UHT 1L", harga: 17000, diskon: true },
+  { id: 10, nama: "Telur Ayam 1kg", harga: 28000, diskon: false },
+  { id: 11, nama: "Air Mineral Galon", harga: 19000, diskon: true },
+  { id: 12, nama: "Mie Instan (5 pcs)", harga: 11000, diskon: false },
+  { id: 13, nama: "Kopi Bubuk 200gr", harga: 18000, diskon: true },
+  { id: 14, nama: "Tisu Gulung (3 pcs)", harga: 15000, diskon: false },
+  { id: 15, nama: "Sabun Cuci Piring", harga: 10000, diskon: true },
+  { id: 16, nama: "Bumbu Masak Instan", harga: 5000, diskon: false },
+  { id: 17, nama: "Kecap Manis 600ml", harga: 21000, diskon: true },
+  { id: 18, nama: "Kompor Gas 2 Tungku", harga: 350000, diskon: false },
+  { id: 19, nama: "Dispenser Air", harga: 420000, diskon: true },
+  { id: 20, nama: "Rice Cooker", harga: 300000, diskon: false }
+];
+
+console.log("=== Seluruh Daftar Belanja ===");
+daftarBelanja.forEach((item) => {
+  console.log(`${item.nama} - Rp${item.harga} ${item.diskon ? "(Diskon!)" : ""}`);
+});
+
+let barangDiskon = daftarBelanja.filter(item => item.diskon);
+console.log("\n=== Barang Diskon ===");
+barangDiskon.forEach(item => {
+  console.log(`${item.nama} - Rp${item.harga} - (Diskon!)`);
+});
+
+let barangMahal = daftarBelanja.filter(item => item.harga > 100000);
+console.log("\n=== Barang Mahal (> Rp100.000) ===");
+barangMahal.forEach(item => {
+  console.log(`${item.nama} - Rp${item.harga}`);
+});
+
+console.log("\n=== Daftar Akhir Belanja ===");
+daftarBelanja.forEach(item => {
+  console.log(`${item.nama} - Rp${item.harga}`);
+});
+
+
+
+// ============ output ============
+
+=== Seluruh Daftar Belanja ===
+Beras 5kg - Rp68000 (Diskon!)
+Minyak Goreng 2L - Rp32000 
+Gula Pasir 1kg - Rp15000 (Diskon!)
+Sabun Mandi - Rp7000 
+Sikat Gigi - Rp12000 (Diskon!)
+Pasta Gigi - Rp13000 
+Detergen Bubuk - Rp28000 (Diskon!)
+Shampoo - Rp23000 
+Susu UHT 1L - Rp17000 (Diskon!)
+Telur Ayam 1kg - Rp28000 
+Air Mineral Galon - Rp19000 (Diskon!)
+Mie Instan (5 pcs) - Rp11000 
+Kopi Bubuk 200gr - Rp18000 (Diskon!)
+Tisu Gulung (3 pcs) - Rp15000 
+Sabun Cuci Piring - Rp10000 (Diskon!)
+Bumbu Masak Instan - Rp5000 
+Kecap Manis 600ml - Rp21000 (Diskon!)
+Kompor Gas 2 Tungku - Rp350000 
+Dispenser Air - Rp420000 (Diskon!)
+Rice Cooker - Rp300000 
+
+=== Barang Diskon ===
+Beras 5kg - Rp68000 - (Diskon!)
+Gula Pasir 1kg - Rp15000 - (Diskon!)
+Sikat Gigi - Rp12000 - (Diskon!)
+Detergen Bubuk - Rp28000 - (Diskon!)
+Susu UHT 1L - Rp17000 - (Diskon!)
+Air Mineral Galon - Rp19000 - (Diskon!)
+Kopi Bubuk 200gr - Rp18000 - (Diskon!)
+Sabun Cuci Piring - Rp10000 - (Diskon!)
+Kecap Manis 600ml - Rp21000 - (Diskon!)
+Dispenser Air - Rp420000 - (Diskon!)
+
+=== Barang Mahal (> Rp100.000) ===
+Kompor Gas 2 Tungku - Rp350000
+Dispenser Air - Rp420000
+Rice Cooker - Rp300000
+
+=== Daftar Akhir Belanja ===
+Beras 5kg - Rp68000
+Minyak Goreng 2L - Rp32000
+Gula Pasir 1kg - Rp15000
+Sabun Mandi - Rp7000
+Sikat Gigi - Rp12000
+Pasta Gigi - Rp13000
+Detergen Bubuk - Rp28000
+Shampoo - Rp23000
+Susu UHT 1L - Rp17000
+Telur Ayam 1kg - Rp28000
+Air Mineral Galon - Rp19000
+Mie Instan (5 pcs) - Rp11000
+Kopi Bubuk 200gr - Rp18000
+Tisu Gulung (3 pcs) - Rp15000
+Sabun Cuci Piring - Rp10000
+Bumbu Masak Instan - Rp5000
+Kecap Manis 600ml - Rp21000
+Kompor Gas 2 Tungku - Rp350000
+Dispenser Air - Rp420000
+Rice Cooker - Rp300000
+</code></pre>
+        </div>
+    </div>
+    <footer>Created by <strong>Muhammad Alfarado</strong></footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script>const daftarBelanja = [
+  { id: 1, nama: "Beras 5kg", harga: 68000, diskon: true },
+  { id: 2, nama: "Minyak Goreng 2L", harga: 32000, diskon: false },
+  { id: 3, nama: "Gula Pasir 1kg", harga: 15000, diskon: true },
+  { id: 4, nama: "Sabun Mandi", harga: 7000, diskon: false },
+  { id: 5, nama: "Sikat Gigi", harga: 12000, diskon: true },
+  { id: 6, nama: "Pasta Gigi", harga: 13000, diskon: false },
+  { id: 7, nama: "Detergen Bubuk", harga: 28000, diskon: true },
+  { id: 8, nama: "Shampoo", harga: 23000, diskon: false },
+  { id: 9, nama: "Susu UHT 1L", harga: 17000, diskon: true },
+  { id: 10, nama: "Telur Ayam 1kg", harga: 28000, diskon: false },
+  { id: 11, nama: "Air Mineral Galon", harga: 19000, diskon: true },
+  { id: 12, nama: "Mie Instan (5 pcs)", harga: 11000, diskon: false },
+  { id: 13, nama: "Kopi Bubuk 200gr", harga: 18000, diskon: true },
+  { id: 14, nama: "Tisu Gulung (3 pcs)", harga: 15000, diskon: false },
+  { id: 15, nama: "Sabun Cuci Piring", harga: 10000, diskon: true },
+  { id: 16, nama: "Bumbu Masak Instan", harga: 5000, diskon: false },
+  { id: 17, nama: "Kecap Manis 600ml", harga: 21000, diskon: true },
+  { id: 18, nama: "Kompor Gas 2 Tungku", harga: 350000, diskon: false },
+  { id: 19, nama: "Dispenser Air", harga: 420000, diskon: true },
+  { id: 20, nama: "Rice Cooker", harga: 300000, diskon: false }
+];
+
+
+console.log("=== Seluruh Daftar Belanja ===");
+daftarBelanja.forEach((item) => {
+    console.log(`${item.nama} - Rp${item.harga} ${item.diskon ? "(Diskon!)" : ""}`);
+});
+
+let barangDiskon = daftarBelanja.filter(item => item.diskon)
+console.log("\n=== Barang Diskon ===");
+barangDiskon.forEach(item => {
+    console.log(`${item.nama} - Rp${item.harga} - ${item.diskon ? "(Diskon!)" : ""}`)
+})
+
+barangMahal = daftarBelanja.filter(item => item.harga > 100000)
+console.log(`\n=== Hapus Barang Mahal ( > Rp 100.000 ) ===`)
+barangMahal.forEach(item => {
+    console.log(`${item.nama} - Rp${item.harga}`)
+})
+
+console.log("\n=== Daftar Akhir Belanja ===")
+daftarBelanja.forEach(item => {
+    console.log(`${item.nama} - Rp${item.harga}`)
+})
+
+const filterSelect = document.getElementById('filter');
+const tableBody = document.getElementById('tableBody');
+
+function formatCurrency(amount) {
+    return `Rp${amount.toLocaleString('id-ID')}`;
+}
+
+function renderTable(data) {
+    tableBody.innerHTML = '';
+    data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.id}</td>
+          <td>${item.nama}</td>
+          <td>${formatCurrency(item.harga)}</td>
+          <td>${item.diskon ? '<span class="discount">Diskon!</span>' : '-'}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+function filterData() {
+    const filterValue = filterSelect.value;
+    let filteredData = [...daftarBelanja];
+
+    switch (filterValue) {
+        case 'discount':
+            filteredData = filteredData.filter(item => item.diskon);
+            break;
+        case 'expensive':
+            filteredData = filteredData.filter(item => item.harga > 100000);
+            break;
+        case 'final':
+            filteredData = filteredData.filter(item => item.harga <= 100000);
+            break;
+        default:
+            break;
+    }
+
+    renderTable(filteredData);
+}
+
+function copyCode() {
+    const codeElement = document.querySelector('.code-container code');
+    const codeText = codeElement.textContent;
+    const textarea = document.createElement('textarea');
+    textarea.value = codeText;
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        document.execCommand('copy');
+        const button = document.querySelector('.copy-button');
+        button.classList.add('copied');
+        button.querySelector('span').textContent = 'Copied';
+        setTimeout(() => {
+            button.classList.remove('copied');
+            button.querySelector('span').textContent = 'Copy Code';
+        }, 2000);
+    } catch (err) {
+        console.error('Failed to copy code: ', err);
+        alert('Failed to copy code. Please try again.');
+    } finally {
+        document.body.removeChild(textarea);
+    }
+}
+
+filterSelect.addEventListener('change', filterData);
+
+renderTable(daftarBelanja);</script>
+</body>
+
+</html>
